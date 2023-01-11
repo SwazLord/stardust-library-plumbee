@@ -45,12 +45,16 @@ public class SteadyClock extends Clock
         currentTime = 0;
     }
 
-    override public final function getTicks(time : Number) : int
+	[Inline]
+    override public final function getTicks(time:Number):int
     {
         currentTime = currentTime + time;
-        if (currentTime > currentInitialDelay) {
+
+        if(currentTime > currentInitialDelay)
+		{
             return StardustMath.randomFloor(ticksPerCall * time);
         }
+
         return 0;
     }
 

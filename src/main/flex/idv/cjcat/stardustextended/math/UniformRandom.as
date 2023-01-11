@@ -28,7 +28,7 @@ public class UniformRandom extends Random
     }
 
     [Inline]
-    override public final function random() : Number
+    override public final function random():Number
     {
         if (radius)
         {
@@ -40,7 +40,7 @@ public class UniformRandom extends Random
         }
     }
 
-    override public function setRange(lowerBound : Number, upperBound : Number) : void
+    override public function setRange(lowerBound:Number, upperBound:Number):void
     {
         var diameter : Number = upperBound - lowerBound;
         radius = 0.5 * diameter;

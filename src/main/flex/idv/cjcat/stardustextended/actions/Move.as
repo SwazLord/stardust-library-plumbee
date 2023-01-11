@@ -38,7 +38,8 @@ public class Move extends Action
         factor = time * multiplier;
     }
 
-    override public function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
+	[Inline]
+    final override public function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
     {
         particle.x += particle.vx * factor;
         particle.y += particle.vy * factor;

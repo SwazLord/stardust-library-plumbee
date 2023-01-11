@@ -57,7 +57,7 @@ public class Deflect extends Action
     public function removeDeflector(deflector : Deflector) : void
     {
         var index : int = _deflectors.indexOf(deflector);
-        if (_deflectors.indexOf(deflector) >= 0) _deflectors.splice(index, 1);
+        if (_deflectors.indexOf(deflector) >= 0) _deflectors.removeAt(index);
     }
 
     /**

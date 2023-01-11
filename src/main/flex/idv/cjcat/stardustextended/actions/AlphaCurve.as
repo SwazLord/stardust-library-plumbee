@@ -14,7 +14,7 @@ import idv.cjcat.stardustextended.xml.XMLBuilder;
  * These functions can be found in the <code>idv.cjcat.stardust.common.easing</code> package.
  * </p>
  */
-[Deprecated(message="use ColorGradient instead")]
+//[Deprecated(message="use ColorGradient instead")]
 public class AlphaCurve extends Action
 {
 
@@ -53,6 +53,7 @@ public class AlphaCurve extends Action
         this.outFunctionExtraParams = [];
     }
 
+	[Inline]
     override public final function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
     {
         if ((particle.initLife - particle.life) < inLifespan) {

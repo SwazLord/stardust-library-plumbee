@@ -45,12 +45,14 @@ public class Emitter extends StardustElement implements ActionCollector, Initial
     private const newParticles : Vector.<Particle> = new Vector.<Particle>();
 
     private var _particles : Vector.<Particle> = new Vector.<Particle>();
+	
     /**
      * Returns every managed particle for custom parameter manipulation.
      * The returned Vector is not a copy.
      * @return
      */
-    public function get particles() : Vector.<Particle>
+	[Inline]
+    final public function get particles() : Vector.<Particle>
     {
         return _particles;
     }
@@ -144,25 +146,30 @@ public class Emitter extends StardustElement implements ActionCollector, Initial
      * </p>
      * @param time The time elapsed since the last step in seconds
      */
-    public final function step(time : Number) : void
+	[Inline]
+    public final function step(time:Number):void
     {
-        if (time <= 0)
+        if(time <= 0)
         {
             return;
         }
+
         timeSinceLastStep = timeSinceLastStep + time;
         currentTime = currentTime + time;
+
         if (timeSinceLastStep < _invFps)
         {
             return;
         }
 
-        particleHandler.stepBegin(this, _particles, timeSinceLastStep);
+		//this is not needed when using starling
+        //particleHandler.stepBegin(this, _particles, timeSinceLastStep);
 
         var i : int;
         var len : int;
 
-        if (active) {
+        if(active)
+		{
             createParticles(_clock.getTicks(timeSinceLastStep));
         }
 
@@ -170,54 +177,71 @@ public class Emitter extends StardustElement implements ActionCollector, Initial
         activeActions.length = 0;
         var action : Action;
         len = actions.length;
-        for (i = 0; i < len; ++i) {
+		
+        for (i = 0; i < len; ++i)
+		{
             action = actions[i];
-            if (action.active) {
+			
+            if(action.active)
+			{
                 activeActions.push(action);
             }
         }
 
         //sorting
         len = activeActions.length;
-        for (i = 0; i < len; ++i) {
+
+        for(i = 0; i < len; ++i)
+		{
             action = activeActions[i];
-            if (action.needsSortedParticles) {
+
+            if(action.needsSortedParticles)
+			{
                 _particles.sort(Particle.compareFunction);
                 break;
             }
         }
+
         //invoke action preupdates.
-        for (i = 0; i < len; ++i) {
+        for (i = 0; i < len; ++i)
+		{
             activeActions[i].preUpdate(this, timeSinceLastStep);
         }
 
         //update the remaining particles
         var p : Particle;
-        for (var m : int = 0; m < _particles.length; ++m) {
+		
+        for(var m : int = 0; m < _particles.length; ++m)
+		{
             p = _particles[m];
-            for (i = 0; i < len; ++i) {
+			
+            for (i = 0; i < len; ++i)
+			{
                 action = activeActions[i];
                 //update particle
                 action.update(this, p, timeSinceLastStep, currentTime);
             }
 
-            if (p.isDead) {
+            if (p.isDead)
+			{
                 particleHandler.particleRemoved(p);
 
                 p.destroy();
                 factory.recycle(p);
 
-                _particles.splice(m, 1);
+                _particles.removeAt(m);
                 m--;
             }
         }
 
         //postUpdate
-        for (i = 0; i < len; ++i) {
+        for(i = 0; i < len; ++i)
+		{
             activeActions[i].postUpdate(this, timeSinceLastStep);
         }
 
-        if (eventDispatcher.hasEventListener(StardustEmitterStepEndEvent.TYPE)) {
+        if(eventDispatcher.hasEventListener(StardustEmitterStepEndEvent.TYPE))
+		{
             eventDispatcher.dispatchEvent(new StardustEmitterStepEndEvent(this));
         }
 
@@ -235,7 +259,8 @@ public class Emitter extends StardustElement implements ActionCollector, Initial
     /**
      * Returns every action for this emitter
      */
-    public final function get actions() : Vector.<Action>
+	[Inline]
+    public final function get actions():Vector.<Action>
     {
         return _actionCollection.actions;
     }
@@ -244,7 +269,7 @@ public class Emitter extends StardustElement implements ActionCollector, Initial
      * Adds an action to the emitter.
      * @param    action
      */
-    public function addAction(action : Action) : void
+    public function addAction(action:Action):void
     {
         _actionCollection.addAction(action);
         action.dispatchAddEvent();
@@ -343,7 +368,8 @@ public class Emitter extends StardustElement implements ActionCollector, Initial
     /**
      * This method is called by the emitter to create new particles.
      */
-    public final function createParticles(pCount : uint) : Vector.<Particle>
+	[Inline]
+    public final function createParticles(pCount:uint):Vector.<Particle>
     {
         newParticles.length = 0;
         factory.createParticles(pCount, currentTime, newParticles);
@@ -357,13 +383,18 @@ public class Emitter extends StardustElement implements ActionCollector, Initial
      * particle call <code>createParticles</code> instead.
      * @param    particles
      */
-    public final function addParticles(particles : Vector.<Particle>) : void
+	[Inline]
+    public final function addParticles(particles:Vector.<Particle>):void
     {
-        var particle : Particle;
-        const plen : uint = particles.length;
-        for (var m : int = 0; m < plen; ++m) {
+        var particle:Particle;
+
+        const plen:uint = particles.length;
+
+        for(var m : int = 0; m < plen; ++m)
+		{
             particle = particles[m];
             _particles.push(particle);
+
             //handle adding
             particleHandler.particleAdded(particle);
         }
@@ -372,10 +403,12 @@ public class Emitter extends StardustElement implements ActionCollector, Initial
     /**
      * Clears all particles from the emitter's simulation.
      */
-    public final function clearParticles() : void
+    public final function clearParticles():void
     {
         var particle : Particle;
-        for (var m : int = 0; m < _particles.length; ++m) {
+
+        for (var m : int = 0; m < _particles.length; ++m)
+		{
             particle = _particles[m];
             //handle removal
             particleHandler.particleRemoved(particle);
@@ -383,6 +416,7 @@ public class Emitter extends StardustElement implements ActionCollector, Initial
             particle.destroy();
             factory.recycle(particle);
         }
+
         _particles = new Vector.<Particle>();
     }
 

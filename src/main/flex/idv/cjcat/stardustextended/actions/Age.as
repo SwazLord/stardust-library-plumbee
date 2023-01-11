@@ -31,6 +31,7 @@ public class Age extends Action
         this.multiplier = multiplier;
     }
 
+	[Inline]
     override public final function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
     {
         particle.life -= timeDelta * multiplier;

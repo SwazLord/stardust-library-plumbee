@@ -3,12 +3,12 @@
 
 import idv.cjcat.stardustextended.StardustElement;
 import idv.cjcat.stardustextended.emitters.Emitter;
-import idv.cjcat.stardustextended.particles.Particle;
-import idv.cjcat.stardustextended.xml.XMLBuilder;
 import idv.cjcat.stardustextended.fields.Field;
 import idv.cjcat.stardustextended.fields.UniformField;
 import idv.cjcat.stardustextended.geom.MotionData2D;
 import idv.cjcat.stardustextended.geom.MotionData2DPool;
+import idv.cjcat.stardustextended.particles.Particle;
+import idv.cjcat.stardustextended.xml.XMLBuilder;
 
 /**
  * Applies accelerations to particles according to the associated gravity fields, in pixels.
@@ -57,7 +57,7 @@ public class Gravity extends Action implements IFieldContainer
     public function removeField(field : Field) : void
     {
         var index : int = _fields.indexOf(field);
-        if (index >= 0) _fields.splice(index, 1);
+        if(index >= 0) _fields.removeAt(index);
     }
 
     /**
@@ -68,17 +68,22 @@ public class Gravity extends Action implements IFieldContainer
         _fields = new Vector.<Field>();
     }
 
+	private var _updateMd2D:MotionData2D; 
+	private var _ui:int, _uLen:uint;
+	
     override public function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
     {
-        var md2D : MotionData2D;
-        var len : uint = _fields.length;
         timeDelta = timeDelta * 100; // acceleration is in m/(s*s)
-        for (var i : int = 0; i < len; i++) {
-            md2D = _fields[i].getMotionData2D(particle);
-            if (md2D) {
-                particle.vx += md2D.x * timeDelta;
-                particle.vy += md2D.y * timeDelta;
-                MotionData2DPool.recycle(md2D);
+
+        for(_ui = 0, _uLen = _fields.length; _ui < _uLen; _ui++)
+		{
+			_updateMd2D = _fields[_ui].getMotionData2D(particle);
+
+            if(_updateMd2D)
+			{
+                particle.vx += _updateMd2D.x * timeDelta;
+                particle.vy += _updateMd2D.y * timeDelta;
+                MotionData2DPool.recycle(_updateMd2D);
             }
         }
     }

@@ -18,8 +18,9 @@ public class Life extends Initializer
     {
         this.random = random;
     }
-
-    override public final function initialize(particle : Particle) : void
+	
+	[Inline]
+    override public final function initialize(particle:Particle):void
     {
         particle.initLife = particle.life = random.random();
     }

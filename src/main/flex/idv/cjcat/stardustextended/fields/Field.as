@@ -34,11 +34,14 @@ public class Field extends StardustElement implements IPosition
         if (!active) return MotionData2DPool.get(0, 0);
 
         md2D = calculateMotionData2D(particle);
-        if (!massless) {
+
+        if(!massless)
+		{
             mass_inv = 1 / particle.mass;
             md2D.x *= mass_inv;
             md2D.y *= mass_inv;
         }
+
         return md2D;
     }
 

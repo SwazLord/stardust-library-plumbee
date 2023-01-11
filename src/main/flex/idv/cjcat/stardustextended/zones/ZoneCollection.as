@@ -8,6 +8,10 @@ public class ZoneCollection
 {
     public var zones : Vector.<Zone> = new Vector.<Zone>();
 
+	public function ZoneCollection():void
+	{	
+	}
+
     [Inline]
     public final function getRandomPointInZones() : MotionData2D
     {

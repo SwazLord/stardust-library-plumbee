@@ -80,25 +80,34 @@ public class ImpulseClock extends Clock
         currentTime = 0;
     }
 
-    override public final function getTicks(time : Number) : int
+	[Inline]
+    override public final function getTicks(time:Number):int
     {
         var ticks : int = 0;
         currentInitialDelay = currentInitialDelay - time;
-        if (currentInitialDelay < 0) {
+		
+        if(currentInitialDelay < 0)
+		{
             currentTime = currentTime + time;
-            if (currentTime <= currentImpulseLength) {
+			
+            if (currentTime <= currentImpulseLength)
+			{
                 ticks = StardustMath.randomFloor(ticksPerCall * time);
             }
-            else if (currentTime - time <= currentImpulseLength) {
+            else if (currentTime - time <= currentImpulseLength)
+			{
                 // timestep was too big and it overstepped this impulse. Calculate the ticks for the fraction time
                 ticks = StardustMath.randomFloor(ticksPerCall * (currentImpulseLength - currentTime + time));
             }
-            if (currentTime >= currentImpulseInterval) {
+			
+            if (currentTime >= currentImpulseInterval)
+			{
                 setCurrentImpulseLength();
                 setCurrentImpulseInterval();
                 currentTime = 0;
             }
         }
+
         return ticks;
     }
 

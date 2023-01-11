@@ -23,24 +23,28 @@ public class Vec2D extends Point
     }
 
     [Inline] //? doesnt seem to work in most cases
-    final override public function get length() : Number
+    final override public function get length():Number
     {
         return Math.sqrt(x * x + y * y);
     }
 
     [Inline]  //? doesnt seem to work in most cases
-    final override public function setTo(xc : Number, yc : Number) : void
+    final override public function setTo(xc:Number, yc:Number):void
     {
         x = xc;
         y = yc;
     }
 
-    final public function set length(value : Number) : void
+	private var _factor:Number;
+
+	[Inline]
+    final public function set length(value:Number):void
     {
-        if ((x == 0) && (y == 0)) return;
-        var factor : Number = value / length;
-        x = x * factor;
-        y = y * factor;
+        if ((x === 0) && (y === 0)) return;
+		
+		_factor = value / length;
+        x = x * _factor;
+        y = y * _factor;
     }
 
     /**
@@ -48,7 +52,8 @@ public class Vec2D extends Point
      * @param    vector
      * @return
      */
-    final public function dot(vector : Vec2D) : Number
+	[Inline]
+    final public function dot(vector:Vec2D):Number
     {
         return (x * vector.x) + (y * vector.y);
     }

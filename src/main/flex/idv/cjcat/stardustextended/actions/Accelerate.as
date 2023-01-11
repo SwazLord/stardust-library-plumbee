@@ -2,10 +2,10 @@
 {
 
 import idv.cjcat.stardustextended.emitters.Emitter;
-import idv.cjcat.stardustextended.particles.Particle;
-import idv.cjcat.stardustextended.xml.XMLBuilder;
 import idv.cjcat.stardustextended.geom.Vec2D;
 import idv.cjcat.stardustextended.geom.Vec2DPool;
+import idv.cjcat.stardustextended.particles.Particle;
+import idv.cjcat.stardustextended.xml.XMLBuilder;
 
 /**
  * Accelerates particles along their velocity directions.
@@ -29,20 +29,29 @@ public class Accelerate extends Action
         _timeDeltaOneSec = time * 60;
     }
 
-    override public function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
+	private var _finalLength:Number;
+	private var _updateVec:Vec2D = new Vec2D(0, 0);
+
+	[Inline]
+    final override public function update(emitter:Emitter, particle:Particle, timeDelta:Number, currentTime:Number):void
     {
-        var v : Vec2D = Vec2DPool.get(particle.vx, particle.vy);
-        const vecLength : Number = v.length;
-        if (vecLength > 0) {
-            var finalVal : Number = vecLength + acceleration * _timeDeltaOneSec;
-            if (finalVal < 0) {
-                finalVal = 0;
+		_updateVec.x = particle.vx;
+		_updateVec.y = particle.vy;
+		
+        if(_updateVec.length > 0)
+		{
+			_finalLength = _updateVec.length + acceleration * _timeDeltaOneSec;
+			
+            if(_finalLength < 0)
+			{
+				_finalLength = 0;
             }
-            v.length = finalVal;
-            particle.vx = v.x;
-            particle.vy = v.y;
+			
+			_updateVec.length = _finalLength;
+
+            particle.vx = _updateVec.x;
+            particle.vy = _updateVec.y;
         }
-        Vec2DPool.recycle(v);
     }
 
     //XML

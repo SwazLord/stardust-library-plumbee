@@ -2,12 +2,12 @@
 {
 import flash.geom.Point;
 
-import idv.cjcat.stardustextended.particles.Particle;
-import idv.cjcat.stardustextended.xml.XMLBuilder;
 import idv.cjcat.stardustextended.geom.MotionData2D;
 import idv.cjcat.stardustextended.geom.MotionData2DPool;
 import idv.cjcat.stardustextended.geom.Vec2D;
 import idv.cjcat.stardustextended.geom.Vec2DPool;
+import idv.cjcat.stardustextended.particles.Particle;
+import idv.cjcat.stardustextended.xml.XMLBuilder;
 
 /**
  * Radial field.
@@ -47,15 +47,22 @@ public class RadialField extends Field
         this.epsilon = epsilon;
     }
 
-    override protected function calculateMotionData2D(particle : Particle) : MotionData2D
+	private var _rVec:Vec2D = new Vec2D(0, 0);
+	private var _calLen:Number;
+	
+	[Inline]
+    final override protected function calculateMotionData2D(particle : Particle) : MotionData2D
     {
-        var r : Vec2D = Vec2DPool.get(particle.x - x, particle.y - y);
-        var len : Number = r.length;
-        if (len < epsilon) len = epsilon;
-        r.length = strength * Math.pow(len, -0.5 * attenuationPower);
-        Vec2DPool.recycle(r);
+		_rVec.x = particle.x - x;
+		_rVec.y = particle.y - y;
+		
+        _calLen = _rVec.length;
+		
+        if(_calLen < epsilon) _calLen = epsilon;
+		
+		_rVec.length = strength * Math.pow(_calLen, -0.5 * attenuationPower);
 
-        return MotionData2DPool.get(r.x, r.y);
+        return MotionData2DPool.get(_rVec.x, _rVec.y);
     }
 
     override public function setPosition(xc : Number, yc : Number) : void

@@ -3,12 +3,12 @@
 
 import idv.cjcat.stardustextended.StardustElement;
 import idv.cjcat.stardustextended.emitters.Emitter;
+import idv.cjcat.stardustextended.geom.Vec2D;
+import idv.cjcat.stardustextended.geom.Vec2DPool;
 import idv.cjcat.stardustextended.math.Random;
 import idv.cjcat.stardustextended.math.UniformRandom;
 import idv.cjcat.stardustextended.particles.Particle;
 import idv.cjcat.stardustextended.xml.XMLBuilder;
-import idv.cjcat.stardustextended.geom.Vec2D;
-import idv.cjcat.stardustextended.geom.Vec2DPool;
 
 /**
  * Applies acceleration normal to a particle's velocity to the particle.
@@ -71,14 +71,20 @@ public class NormalDrift extends Action
         _timeDeltaOneSec = time * 60;
     }
 
-    override public function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
+	private var _updateVec:Vec2D = new Vec2D(0, 0);
+
+	[Inline]
+    final override public function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
     {
-        var v : Vec2D = Vec2DPool.get(particle.vy, particle.vx);
-        v.length = _random.random();
-        if (!massless) v.length /= particle.mass;
-        particle.vx += v.x * _timeDeltaOneSec;
-        particle.vy += v.y * _timeDeltaOneSec;
-        Vec2DPool.recycle(v);
+		_updateVec.x = particle.vy;
+		_updateVec.y = particle.vx;
+		
+		_updateVec.length = _random.random();
+		
+        if(!massless) _updateVec.length /= particle.mass;
+		
+        particle.vx += _updateVec.x * _timeDeltaOneSec;
+        particle.vy += _updateVec.y * _timeDeltaOneSec;
     }
 
     //XML

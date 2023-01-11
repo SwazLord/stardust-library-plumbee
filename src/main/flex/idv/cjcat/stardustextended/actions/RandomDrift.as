@@ -99,19 +99,25 @@ public class RandomDrift extends Action
         _timeDeltaOneSec = time * 60;
     }
 
+	private var _updateRX:Number;
+	private var _updateRY:Number;
+
+	private var _updateFactor:Number;
+
     override public function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
     {
-        var rx : Number = _randomX.random();
-        var ry : Number = _randomY.random();
+		_updateRX = _randomX.random();
+		_updateRY = _randomY.random();
 
-        if (!massless) {
-            var factor : Number = 1 / particle.mass;
-            rx *= factor;
-            ry *= factor;
+        if (!massless)
+		{
+			_updateFactor = 1 / particle.mass;
+			_updateRX *= _updateFactor;
+			_updateRY *= _updateFactor;
         }
 
-        particle.vx += rx * _timeDeltaOneSec;
-        particle.vy += ry * _timeDeltaOneSec;
+        particle.vx += _updateRX * _timeDeltaOneSec;
+        particle.vy += _updateRY * _timeDeltaOneSec;
     }
 
     //XML

@@ -55,7 +55,8 @@ public class Impulse extends Action
         MotionData2DPool.recycle(md2D);
     }
 
-    override public function postUpdate(emitter : Emitter, time : Number) : void
+	[Inline]
+    final override public function postUpdate(emitter : Emitter, time : Number) : void
     {
         _discharged = true;
     }

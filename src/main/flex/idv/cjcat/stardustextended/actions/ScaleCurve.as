@@ -52,6 +52,7 @@ public class ScaleCurve extends Action
         this.outFunctionExtraParams = [];
     }
 
+	[Inline]
     override public final function update(emitter : Emitter, particle : Particle, timeDelta : Number, currentTime : Number) : void
     {
         if ((particle.initLife - particle.life) < inLifespan) {

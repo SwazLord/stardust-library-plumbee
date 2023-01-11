@@ -9,9 +9,9 @@ public class StardustEmitterStepEndEvent extends Event
 
     public static const TYPE : String = "StardustEmitterStepEndEvent";
 
-    private var _emitter : Emitter;
+    private var _emitter:Emitter;
 
-    public function StardustEmitterStepEndEvent(emitter : Emitter)
+    public function StardustEmitterStepEndEvent(emitter:Emitter)
     {
         super(TYPE);
         _emitter = emitter;

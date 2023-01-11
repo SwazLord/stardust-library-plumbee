@@ -26,20 +26,26 @@ public class PixelHandler extends ParticleHandler
 
     private var x : int, y : int, finalColor : uint;
 
-    override public function stepEnd(emitter : Emitter, particles : Vector.<Particle>, time : Number) : void
+	[Inline]
+    final override public function stepEnd(emitter:Emitter, particles:Vector.<Particle>, time:Number):void
     {
-        for each (var particle : Particle in particles) {
+        for each (var particle : Particle in particles)
+		{
             x = int(particle.x + 0.5);
+			
             if ((x < 0) || (x >= targetBitmapData.width)) return;
+			
             y = int(particle.y + 0.5);
+			
             if ((y < 0) || (y >= targetBitmapData.height)) return;
 
             var rgbColor : uint = ColorUtil.rgbToHex(particle.colorR, particle.colorG, particle.colorB);
+			
             finalColor = (rgbColor & 0xFFFFFF) | uint(uint(particle.alpha * 255) << 24);
+			
             targetBitmapData.setPixel32(x, y, finalColor);
         }
     }
-
 
     //XML
     //------------------------------------------------------------------------------------------------

@@ -88,7 +88,8 @@ public class Explode extends Action
         Vec2DPool.recycle(r);
     }
 
-    override public function postUpdate(emitter : Emitter, time : Number) : void
+	[Inline]
+    final override public function postUpdate(emitter : Emitter, time : Number) : void
     {
         if (discharged) return;
 
